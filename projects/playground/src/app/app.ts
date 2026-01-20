@@ -9,6 +9,7 @@ SelectInput as CSelectInput,
 //Overlays
 Dialog as CDialog, CatInput as CCatInput} from 'catarina';
 import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 //import { getIconPath } from 'safirial-icons';
 
 @Component({
@@ -17,6 +18,7 @@ import { NgFor, NgIf } from '@angular/common';
     //Angular
     NgFor,
     NgIf,
+    FormsModule,
 
     //Components
     CButton,
@@ -56,6 +58,7 @@ export class App implements OnInit {
 
   // Select Input
   options: string[] = ['A','B','C','D'];
+  value: string = '';
   //Life Cicle Events
   constructor(
     private theming: Theming
@@ -76,6 +79,11 @@ export class App implements OnInit {
   //Just an test event for the buttons
   counterEvent(): void {
     this.clickCount++;
+  }
+
+  //Input Events
+  onValue(value: string) {
+    console.log(value);
   }
 
   //Dialog Events

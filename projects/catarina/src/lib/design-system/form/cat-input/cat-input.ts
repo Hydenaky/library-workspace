@@ -37,6 +37,7 @@ export class CatInput implements OnInit {
       .cat-input {
         border: 1px solid var(--neutral-color-3);
         background-color: var(--neutral-color-0);
+        color: var(--neutral-color-9);
         border-radius: 18px;
         outline: none;
         transition: all 0.2s;

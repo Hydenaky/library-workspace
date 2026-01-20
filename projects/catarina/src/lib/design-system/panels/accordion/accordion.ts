@@ -63,7 +63,7 @@ export class Accordion {
     this.status = newStatus;
   };
 
-  @HostBinding('attr.data-card-class') get dataCustomClass() {
+  @HostBinding('attr.data-accordion-class') get dataCustomClass() {
     return this.customClass;
   }
 

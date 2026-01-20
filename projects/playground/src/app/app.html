@@ -103,7 +103,7 @@
                 <input catInput placeholder="Number Input" type="number">
             </div>
             <div class="input-inside-card">
-                <cat-select-input [options]="options" placeholder="Select Input" transform="translateY(0%) translateX(0%)"></cat-select-input>
+                <cat-select-input [(ngModel)]="value" (ngModelChange)="onValue($event)" [options]="options" placeholder="Select Input" transform="translateY(0%) translateX(0%)"></cat-select-input>
             </div>
             <div class="input-inside-card">
                 <cat-color-input [icon]="true"></cat-color-input>

@@ -48,6 +48,8 @@ export class Theming {
   public calculateDynamicPalettes(dark: boolean): { neutral: string[], elements: string[] } {
     const theme: boolean = dark;
     const contrastTheme: boolean = !dark;
+    this.activeThemeSubject.next(dark);
+
 
     // Calculate neutral colors (changes with theme)
     const neutralColors: string[] = contrastTheme
@@ -69,7 +71,6 @@ export class Theming {
     // Apply theme to CSS variables
     this.applyTheme(allPalettes);
     
-    console.log(this.allPalettesSubject.value);
     return {
       neutral: neutralColors,
       elements: elementsColors

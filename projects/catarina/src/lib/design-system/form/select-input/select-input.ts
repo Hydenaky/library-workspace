@@ -1,5 +1,5 @@
 import { NgFor, NgClass } from '@angular/common';
-import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CatInput } from "../cat-input/cat-input";
 
@@ -9,7 +9,7 @@ import { CatInput } from "../cat-input/cat-input";
     NgFor,
     CatInput,
     NgClass
-],
+  ],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => SelectInput),
@@ -29,6 +29,8 @@ export class SelectInput implements ControlValueAccessor {
   value: string | number = '';
   active = false;
 
+  @Input() variant: 'surface' | 'elevated' | 'outlined' = 'surface';
+  @Input() scrolleable: boolean = false;
   @Input() customClass: string = '';
 
   //@Output() selected = new EventEmitter<string>();
@@ -68,4 +70,11 @@ export class SelectInput implements ControlValueAccessor {
     //this.selected.emit(option);
   };
 
+  @HostBinding('attr.data-select-input-class') get dataCustomClass() {
+    return this.customClass;
+  }
+
+  get selectInputClass(): string {
+    return `${this.variant} ${this.scrolleable ? 'scrolleable' : ''}`;
+  }
 }
