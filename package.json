@@ -1,6 +1,6 @@
 {
   "name": "library-workspace",
-  "version": "0.0.0",
+  "version": "20.3.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -29,6 +29,7 @@
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
     "rxjs": "~7.8.0",
+    "safirial-icons": "file:../../javascript/safirial-icons/safirial-icons-1.0.3.tgz",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

@@ -3,58 +3,6 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "safirial": {
-      "projectType": "library",
-      "root": "projects/safirial",
-      "sourceRoot": "projects/safirial/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/safirial/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/safirial/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "projects/safirial/tsconfig.spec.json"
-          }
-        }
-      }
-    },
-    "safirial-icons": {
-      "projectType": "library",
-      "root": "projects/safirial-icons",
-      "sourceRoot": "projects/safirial-icons/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/safirial-icons/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/safirial-icons/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "projects/safirial-icons/tsconfig.spec.json"
-          }
-        }
-      }
-    },
     "playground": {
       "projectType": "application",
       "schematics": {
@@ -82,7 +30,7 @@
               },
               {
                 "glob": "**/*.svg",
-                "input": "projects/safirial-icons/assets",
+                "input": "node_modules/safirial-icons/assets",
                 "output": "safirial-icons"
               }
             ],

@@ -41,3 +41,6 @@ export * from './lib/theming/theming';
 
 // Tokens
 export * from './lib/tokens/icon-provider.token';
+
+// Utils
+export * from './lib/utils/icon-utils';

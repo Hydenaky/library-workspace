@@ -3,19 +3,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { isPlatformBrowser } from '@angular/common';
 import { ICON_PROVIDER } from '../../tokens/icon-provider.token';
 
-const ICON_NOT_FOUND_SVG = `
-<svg viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg" 
-  aria-labelledby="placeholderIconTitle" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
-  <title id="placeholderIconTitle">Icon not found</title>
-  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-  <g id="SVGRepo_iconCarrier"> 
-    <rect width="18" height="18" x="3" y="3"></rect>
-    <path stroke-linecap="round" d="M21 21L3 3 21 21zM21 3L3 21 21 3z"></path> 
-  </g>
-</svg>
-`;
-
 @Component({
   selector: 'cat-icon',
   imports: [],
@@ -31,6 +18,7 @@ export class Icon implements OnDestroy {
   
   svgContent = signal<SafeHtml>('');
   isLoading = signal<boolean>(false);
+  isVisible = signal<boolean>(false);
 
   @Input() size: string = '1em';
   @Input() color = 'currentColor';
@@ -41,43 +29,50 @@ export class Icon implements OnDestroy {
 
   // Usar nombre (con provider)
   @Input() set name(iconName: string) {
-    if (!iconName) return;
+    if (!iconName) {
+      this.isVisible.set(false);
+      return;
+    }
 
     const path = this.iconProvider.getPath(iconName);
 
-    // Cancelar petición anterior si existe
+    // Cancela petición anterior si existe
     this.abortController?.abort();
 
-    // Si el path es el fallback por defecto (icons/), no intentes cargarlo
+    // Si el path es el fallback por defecto (icons/), no mostrar nada
     if (!path || path.startsWith('icons/')) {
-      this.showPlaceholder();
+      this.isVisible.set(false);
       return;
     }
 
     this.loadSvg(path);
   }
 
-  // Usar path directo
+  // Usa path directo
   @Input() set src(path: string) {
-    if (!path) return;
+    if (!path) {
+      this.isVisible.set(false);
+      return;
+    }
     
-    // Cancelar petición anterior si existe
+    // Cancela petición anterior si existe
     this.abortController?.abort();
     this.loadSvg(path);
   }
 
   private loadSvg(path: string) {
-    // En SSR, mostrar placeholder inmediatamente
+    // En SSR, no mostrar nada
     if (!isPlatformBrowser(this.platformId)) {
-      this.showPlaceholder();
+      this.isVisible.set(false);
       return;
     }
 
-    // Limpiar contenido y mostrar estado de carga
+    // Limpia contenido y oculta el icono mientras carga
     this.isLoading.set(true);
     this.svgContent.set('');
+    this.isVisible.set(false);
 
-    // Crear nuevo AbortController para esta petición
+    // Crea nuevo AbortController para esta petición
     this.abortController = new AbortController();
 
     fetch(path, { 
@@ -92,40 +87,33 @@ export class Icon implements OnDestroy {
         return response.text();
       })
       .then(svg => {
-        // VALIDACIÓN CRÍTICA: Verificar que sea un SVG
+        // Verifica que sea un SVG
         if (!this.isValidSvg(svg)) {
           console.error(`Invalid SVG received from ${path}. Response is not valid SVG.`);
-          this.showPlaceholder();
+          this.isVisible.set(false);
           return;
         }
 
         const processed = this.processSvg(svg);
         if (processed) {
           this.svgContent.set(this.sanitizer.bypassSecurityTrustHtml(processed));
+          this.isVisible.set(true);
         } else {
-          this.showPlaceholder();
+          this.isVisible.set(false);
         }
       })
       .catch((error) => {
-        // Ignorar errores de abort (son esperados)
+        // Ignorar error de abort
         if (error.name === 'AbortError') {
           return;
         }
         
         console.error(`Error loading icon from ${path}:`, error.message);
-        this.showPlaceholder();
+        this.isVisible.set(false);
       })
       .finally(() => {
         this.isLoading.set(false);
       });
-  }
-
-  private showPlaceholder(): void {
-    this.isLoading.set(false);
-    const processed = this.processSvg(ICON_NOT_FOUND_SVG);
-    if (processed) {
-      this.svgContent.set(this.sanitizer.bypassSecurityTrustHtml(processed));
-    }
   }
 
   private isValidSvg(content: string): boolean {
