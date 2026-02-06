@@ -55,17 +55,7 @@ export class Menu implements AfterViewInit, OnDestroy {
     this.resizeObserver = new ResizeObserver(() => {
       this.checkOverflow();
     });
-    this.resizeObserver.observe(this.menuContainer.nativeElement);
-
-    /*this.mutationObserver = new MutationObserver(() => {
-      console.log('what the fuc*?');
-      
-      this.checkOverflow();
-    });
-    this.mutationObserver.observe(this.menuContent.nativeElement, {
-      childList: true,
-      subtree: true
-    });*/
+    this.resizeObserver.observe(this.menuContent.nativeElement);
 
     document.addEventListener('click', this.handleOutsideClick);
   }
@@ -83,7 +73,7 @@ export class Menu implements AfterViewInit, OnDestroy {
   };
 
   private checkOverflow() {
-    // Si el dropdown está abierto, no recalcula puesto q los elementos están en el dropdown
+    // Si el dropdown está abierto, no recalcula
     if (this.isDropdownOpen()) {
       const overflowItems = this.overflowItems();
       if (overflowItems.length > 0) {
@@ -194,21 +184,7 @@ export class Menu implements AfterViewInit, OnDestroy {
       // Mover el elemento real al dropdown
       // El elemento ya está oculto (display: none), así que se hace visible y se mueve al dropdown
       item.style.display = '';
-      //item.style.visibility = 'visible';
-      //item.style.opacity = '1';
-
-      // Añadir un listener para cerrar el dropdown cuando se haga click
-      /*const closeHandler = () => {
-        this.isDropdownOpen.set(false);
-      };
-
-      // Buscar el botón dentro del elemento y añadir el listener
-      const button = item.querySelector('button, cat-button, [role="button"]') as HTMLElement;
-      if (button) {
-        button.addEventListener('click', closeHandler, { once: true });
-      } else {
-        item.addEventListener('click', closeHandler, { once: true });
-      }*/
+      item.style.visibility = 'visible';
 
       // Mover el elemento al dropdown
       dropdownContent.appendChild(item);
@@ -252,24 +228,4 @@ export class Menu implements AfterViewInit, OnDestroy {
       }, 0);
     }
   }
-/*
-  private waitForDropdownAndUpdate() {
-    // Intentar actualizar el dropdown, reintentando si no está disponible
-    const maxAttempts = 20;
-    let attempts = 0;
-
-    const tryUpdate = () => {
-      attempts++;
-      const menuWrapper = this.menuContainer.nativeElement.closest('.menu-wrapper');
-      const dropdown = menuWrapper?.querySelector('.dropdown');
-
-      if (dropdown) {
-        this.updateDropdownContent();
-      } else if (attempts < maxAttempts) {
-        setTimeout(tryUpdate, 10);
-      }
-    };
-
-    tryUpdate();
-  }*/
 }
